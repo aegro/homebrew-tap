@@ -1,4 +1,6 @@
 class Aegro < Formula
+  include Language::Python::Virtualenv
+
   desc "CLI for Aegro agricultural management API"
   homepage "https://pypi.org/project/aegro/"
   url "https://files.pythonhosted.org/packages/source/a/aegro/aegro-0.4.0.tar.gz"
