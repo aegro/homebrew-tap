@@ -1,6 +1,4 @@
 class Aegro < Formula
-  include Language::Python::Virtualenv
-
   desc "CLI for Aegro agricultural management API"
   homepage "https://pypi.org/project/aegro/"
   url "https://files.pythonhosted.org/packages/source/a/aegro/aegro-0.4.0.tar.gz"
@@ -10,7 +8,9 @@ class Aegro < Formula
   depends_on "python@3.12"
 
   def install
-    virtualenv_install_with_resources
+    virtualenv_create(libexec, "python3.12")
+    system libexec/"bin/pip", "install", "aegro==#{version}"
+    bin.install_symlink Dir[libexec/"bin/aegro"]
   end
 
   test do
