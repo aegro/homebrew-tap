@@ -10,8 +10,10 @@ class Aegro < Formula
   depends_on "python@3.12"
 
   def install
-    venv = virtualenv_create(libexec, "python3.12")
-    venv.pip_install "aegro==#{version}"
+    virtualenv_create(libexec, "python3.12")
+    system Formula["python@3.12"].opt_bin/"python3.12", "-m", "pip",
+           "--python=#{libexec}/bin/python",
+           "install", "aegro==#{version}"
     bin.install_symlink Dir[libexec/"bin/aegro"]
   end
 
