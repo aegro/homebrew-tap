@@ -1,22 +1,33 @@
-# Homebrew Tap for Aegro CLI
+# Aegro Homebrew Tap
 
-CLI for Aegro agricultural management API.
+Homebrew tap com as ferramentas da Aegro — CLIs e apps de macOS.
 
-## Install
-
+```sh
+brew tap aegro/tap
 ```
-brew tap aegro/aegro-cli
+
+## Disponível
+
+### Aegro CLI (formula)
+
+CLI da API de gestão agrícola da Aegro.
+
+```sh
 brew install aegro
-```
-
-## Upgrade
-
-```
-brew update
 brew upgrade aegro
 ```
 
-## More info
+- [PyPI](https://pypi.org/project/aegro/) · [código](https://github.com/aegro/tool-aegro-cli)
 
-- [Aegro CLI on PyPI](https://pypi.org/project/aegro/)
-- [Source code](https://github.com/aegro/tool-aegro-cli)
+### Monitor Claude (cask)
+
+Monitor de consumo do Claude Code na barra de menu do macOS — app nativo, assinado com Developer ID e notarizado.
+
+```sh
+brew install --cask monitor-claude
+brew upgrade --cask monitor-claude
+```
+
+Na primeira execução, o macOS pergunta uma vez se o app pode ler a credencial do Claude Code no Keychain — clique **Sempre Permitir** (não volta a perguntar).
+
+- [código](https://github.com/aegro/tool-claude-monitor-macos)
