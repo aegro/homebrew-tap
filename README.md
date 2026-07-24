@@ -17,7 +17,7 @@ brew install aegro
 brew upgrade aegro
 ```
 
-- [PyPI](https://pypi.org/project/aegro/) · [código](https://github.com/aegro/tool-aegro-cli)
+- [PyPI](https://pypi.org/project/aegro/)
 
 ### Monitor Claude (cask)
 
