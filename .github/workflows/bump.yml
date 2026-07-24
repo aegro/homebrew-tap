@@ -1,0 +1,77 @@
+name: Bump
+
+# Atualiza um cask/formula deste tap quando o repo de origem publica uma versão.
+# - repository_dispatch (type "bump"): disparado pelo CI do monitor/cli, com
+#   client_payload {kind, name, version}.
+# - workflow_dispatch: disparo manual (re-bump / teste).
+# Escreve no próprio tap com o GITHUB_TOKEN — nenhum PAT é necessário aqui;
+# o PAT (HOMEBREW_TAP_TOKEN) vive nos repos de origem, só pra disparar.
+
+on:
+  workflow_dispatch:
+    inputs:
+      kind:
+        description: cask ou formula
+        required: true
+        type: choice
+        options: [cask, formula]
+      name:
+        description: "nome (ex.: monitor-claude, aegro)"
+        required: true
+      version:
+        description: versão (sem prefixo v)
+        required: true
+  repository_dispatch:
+    types: [bump]
+
+permissions:
+  contents: write
+
+jobs:
+  bump:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4.4.0
+
+      - name: Resolver entradas
+        id: in
+        # Payload passa por env (nunca interpolado direto no shell) e é validado
+        # com allowlist — evita injeção via repository_dispatch.
+        env:
+          EV: ${{ github.event_name }}
+          RD_KIND: ${{ github.event.client_payload.kind }}
+          RD_NAME: ${{ github.event.client_payload.name }}
+          RD_VERSION: ${{ github.event.client_payload.version }}
+          WD_KIND: ${{ inputs.kind }}
+          WD_NAME: ${{ inputs.name }}
+          WD_VERSION: ${{ inputs.version }}
+        run: |
+          set -euo pipefail
+          if [ "$EV" = "repository_dispatch" ]; then
+            kind="$RD_KIND"; name="$RD_NAME"; version="$RD_VERSION"
+          else
+            kind="$WD_KIND"; name="$WD_NAME"; version="$WD_VERSION"
+          fi
+          case "$kind" in cask|formula) ;; *) echo "kind inválido: '$kind'"; exit 1 ;; esac
+          case "$name" in *[!a-zA-Z0-9._-]*|"") echo "name inválido: '$name'"; exit 1 ;; esac
+          case "$version" in *[!a-zA-Z0-9._-]*|"") echo "version inválida: '$version'"; exit 1 ;; esac
+          {
+            echo "kind=$kind"
+            echo "name=$name"
+            echo "version=$version"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Bump
+        run: ./scripts/bump.sh "${{ steps.in.outputs.kind }}" "${{ steps.in.outputs.name }}" "${{ steps.in.outputs.version }}"
+
+      - name: Commit e push
+        run: |
+          set -euo pipefail
+          if git diff --quiet; then
+            echo "sem mudança — ${{ steps.in.outputs.name }} já estava em ${{ steps.in.outputs.version }}"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -am "chore(${{ steps.in.outputs.kind }}): bump ${{ steps.in.outputs.name }} -> ${{ steps.in.outputs.version }}"
+          git push
