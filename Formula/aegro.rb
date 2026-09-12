@@ -3,8 +3,8 @@ class Aegro < Formula
 
   desc "CLI for Aegro agricultural management API"
   homepage "https://pypi.org/project/aegro/"
-  url "https://files.pythonhosted.org/packages/89/ae/2c92d205d3b9ec0dcaab231e8941badeff2fc93697bdbd71633ca059fb27/aegro-0.23.0.tar.gz"
-  sha256 "6cdee0ea185efc78667baf54a238d58abaac67b4580680aaa3980c82a2763513"
+  url "https://files.pythonhosted.org/packages/c7/92/bca7cb678c52666770b38f63123f9c18e6754fef55f99caaa3cb5d435a26/aegro-0.24.0.tar.gz"
+  sha256 "a4c6e57c8ebc83fdc590ff1ee446d694f81902606a8d907ff16ad8ba8750f6c5"
   license "MIT"
 
   depends_on "python@3.12"
