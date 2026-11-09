@@ -1,6 +1,6 @@
 cask "monitor-claude" do
-  version "0.6.11"
-  sha256 "2879b0a7bf8ad14cdee2f6e326c982dc5245c85b1b7007d9d4c4344d395e0c58"
+  version "0.6.12"
+  sha256 "8fac0a572ae8857a35d5a747ac7b63f0de09582bc82fcfb4028e4aa9406cd0f0"
 
   url "https://github.com/aegro/tool-claude-monitor-macos/releases/download/v#{version}/Monitor-Claude-#{version}.zip"
   name "Monitor Claude"
